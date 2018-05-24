@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>登录页</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/signin.css" rel="stylesheet">
+    <style type="text/css">
+        #danger {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <form class="form-signin">
+            <h2 class="form-signin-heading">请登录</h2>
+            <label for="username" class="sr-only">用户名</label>
+            <input type="text" id="username" class="form-control" placeholder="用户名不能为空" required autofocus>
+            <label for="password" class="sr-only">密码</label>
+            <input type="password" id="password" class="form-control" placeholder="密码为6位" required>
+
+            <button class="btn btn-lg btn-primary btn-block" type="button" id="denglu">登录</button>
+        </form>
+        <div class="alert alert-danger form-signin" role="alert" id="danger">用户名已存在</div>
+    </div>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $("input").focus(function () {
+            $("#danger").fadeOut();
+        })
+        $("#denglu").click(function () {
+            $.post("/dologin", {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            }, function (result) {
+                if (result === "-1") {
+                    $("#danger").fadeIn();
+                    $("#danger").html("密码不正确");
+                }else if(result === "-2") {
+                   $("#danger").fadeIn();
+                    $("#danger").html("用户名不存在");
+
+                } else if (result === "1") {
+                    alert("登录成功！您将回到首页");
+                    window.location = "/";
+                }
+            })
+        })
+
+    </script>
+</body>
+
+</html>

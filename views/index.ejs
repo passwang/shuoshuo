@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>班级说说</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+    img{
+        border-radius: 50%;
+        border: 1px solid #ccc;
+    }
+    #id{
+        height: 500px;
+    }
+    </style>
+</head>
+<body>
+<% include header.ejs %>
+<!-- /.navbar -->
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container" style="padding: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <div class="media">
+                            <% if(login){ %>
+                            <div class="media-left">
+                                <a href="/getAvatar">
+                                    <img  title="点击可以修改头像" width="100px" height="100px" style="border:1px solid #ccc;" src="./images/<%= avatar %>">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                        <p>欢迎您，
+                                            <%= username%>
+                                        </p>
+                                        <p> 在这里您可以畅所预言，做自己想做的</p>
+                                </h4>
+                            </div>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <textarea name="liuyan" cols="80" rows="10" id="liuyan"></textarea>
+                    <button type="button" class="btn btn-success" style="margin-left: 20px;" id="fabiao">发表</button>
+                </div>
+            </div>
+            <% } else {%>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <p>没有账号去注册</p>
+                        <p>
+                            <a class="btn btn-primary btn-lg" href="./regist" role="button">去注册</a>
+                        </p>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <p>已有账号去登录</p>
+                        <p>
+                            <a class="btn btn-primary btn-lg" href="./login" role="button">去登录</a>
+                        </p>
+                    </div>
+                </div>
+                </div>
+            <%}%>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 分页 -->
+        <ul class="pagination">
+        </ul>
+        <!-- 分页 -->
+        <!-- 列表 -->
+        <div class="row" id="row">
+        </div>
+        <!-- 列表 -->
+        <hr>
+        <footer>
+            <p>&copy; 2016 Company, Inc.</p>
+        </footer>
+    </div>
+    <!-- /container -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/underScore.js"></script>
+    <script  type="text/template" id="template">
+            <div class="col-md-4 list">
+                <h2><image width="50px" height="50px" src='/images/{{= avatar}}'>{{= username }}</h2>
+                <p>【留言】:{{=  content }}</p>
+                <p>【时间】:{{=  time }}</p>
+                <p>
+                    <a class="btn btn-default" href="#" role="button">详细信息</a>
+                </p>
+            </div>
+    </script>
+    <script type="text/JavaScript">
+    //发表说说
+    $("#fabiao").click(function () {
+        $.post("/fabiao",
+        {
+         "liuyan": $("#liuyan").val()
+        },function (result) {
+           if(result === "1") {//发表成功
+            alert("发表成功");
+             window.location="/";
+
+           } else {
+               alert("发表失败，请与管理员联系");
+           }
+        })
+    })
+    //获取头像及说说列表用ajax
+    $.get("/list",function (result) {
+        console.log(result);
+    //    var templateString = $("#template").html();
+    //     var compiled = _.template(templateString);
+    //     for(var i=0; i<result.length;i++) {
+    //         $.ajax({
+    //             url: "/touxiang?name="+ result[i].username,
+    //             async: false,
+    //             type: "GET",
+    //             success: function (result2) {
+    //               result[i].avatar = result2;
+    //           }
+    //         });
+    //         var comString = compiled(result[i]);
+    //         $("#row").append(comString);
+    //      }
+    })
+    //获取分页数量
+    $.get("/getPageNum",function (result) {
+        var page = parseInt(result) / 2;//分几页
+        for(var i=0;i < page ;i++) {
+           $(".pagination").append('<li class="page"><a href="#">'+ i + '</a></li>')
+        }
+    })
+    getpage(0);
+    //获取分页内容
+    $(".pagination").on("click", "li", function () {
+        $(".list").remove();
+        var page = $(this).index();
+        getpage(page);//渲染列表
+    })
+    function getpage(page) {
+        var templateString = $("#template").html();
+        var compiled = _.template(templateString);
+        $.get("/page?page=" + page, function (result) {
+         for(var i=0; i<result.length;i++) {
+            $.ajax({
+                url: "/touxiang?name="+ result[i].username,
+                async: false,
+                type: "GET",
+                success: function (result2) {
+                  result[i].avatar = result2;
+              }
+            });
+            var comString = compiled(result[i]);
+            $("#row").append(comString);
+         }
+    }) 
+    }
+    </script>
+</body>
+
+</html>

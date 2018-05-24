@@ -1,0 +1,62 @@
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">班级说说</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <% if(active === "全部说说") { %>
+                <li class="active">
+                    <% }else { %>
+                    <li>
+                    <% } %>
+                    <a href="/">全部说说</a>
+                </li>
+                <% if (login) { %>
+                 <% if(active === "我的说说") { %>
+                    <li class="active">
+                        <% }else { %>
+                            <li>
+                                <% } %>
+                    <a href="/user/<%= username%>">我的说说</a>
+                </li>
+                <% } %>
+               <% if(active === "成员列表") { %>
+                    <li class="active">
+                        <% }else { %>
+                            <li>
+                                <% } %>
+                        <a href="/userlist">成员列表</a>
+                    </li>
+            </ul>
+            <% if (login) { %>
+                <form class="navbar-form navbar-right" style="display: inline-block;">
+                    <a href="#">欢迎你,
+                        <%= username%>
+                    </a>
+                    <a href="/getAvatar" style="margin-left: 20px;">设置资料</a>
+                </form>
+
+                <% } else {%>
+                    <form class="navbar-form navbar-right" style="display: inline-block;">
+                        <button type="submit" class="btn btn-success">
+                            <a href="./regist">注册</a>
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <a href="./login">登录</a>
+                        </button>
+                    </form>
+                    <% }%>
+        </div>
+
+        <!--/.navbar-collapse
+    </div>
+    <!-- /.container -->
+</nav>

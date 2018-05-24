@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%= user %>的说说</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        img {
+            border-radius: 50%;
+            border: 1px solid #ccc;
+        }
+
+        #id {
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <% include header.ejs %>
+<div class="panel panel-default container" style="margin-top: 60px;">
+    <div class="panel-heading">
+        <img  width="100px" height="100px" style="border:1px solid #ccc;" src="/images/<%= avatar %>">
+        <span class="panel-title"><%= user %>的说说</span>
+    </div>
+    <% for(var i = 0; i< gerenshuoshuo.length; i++){ %>
+    <div class="panel-body">
+       【留言内容】：<%= gerenshuoshuo[i].content%>
+       【时间】：    <%= gerenshuoshuo[i].time%>
+    </div>
+    <% } %>
+</div>
+        <!-- 列表 -->
+        <hr>
+        <footer>
+            <p>&copy; 2016 Company, Inc.</p>
+        </footer>
+    </div>
+    <!-- /container -->
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/underScore.js"></script>
+</body>
+
+</html>
